@@ -1,0 +1,32 @@
+'M1002.m1s  Store Start time point
+
+Open "C:\Users\cnc\Google Drive\Log\Log.csv" For Output As #2
+Close #2
+
+Kill "C:\Users\cnc\Google Drive\Log\Log.csv"
+
+Dim StartTime As String                
+Dim StartDate As String                
+
+StartTime = Time(Now) 
+StartDate = Date() 
+
+Open "C:\Users\cnc\Google Drive\Log\TimeFile" For Output As #1   ' Open to write file.
+Write #1, StartTime
+Write #1, StartDate
+Close #1
+
+Code "G4 P0.5"
+While IsMoving
+Wend
+
+Sec = Second(StartTime)
+Min = Minute(StartTime)
+Hr = Hour(StartTime)
+Dy = Day(StartDate)
+
+SetVar(100,Sec)
+SetVar(101,Min)
+SetVar(102,Hr)
+SetVar(103,Dy)
+

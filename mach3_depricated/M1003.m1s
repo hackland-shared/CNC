@@ -1,0 +1,86 @@
+'M1003.m1s  Get End Time point and calc, and post file
+
+Dim StartTime As String
+Dim StartDate As String 
+Dim EndTime As String
+Dim EndDate As String
+Dim File As String
+Dim Days 
+
+EndTime = Time(Now) 
+EndDate = Date()
+SecEnd = Second(EndTime)
+MinEnd = Minute(EndTime)
+HrEnd = Hour(EndTime)
+DyEnd = Day(EndDate)
+
+SecStart = GetVar(100)
+MinStart = GetVar(101)
+HrStart = GetVar(102)
+DyStart = GetVar(103)
+
+File = FileName()
+
+Open "C:\Users\cnc\Google Drive\Log\TimeFile" For Input As #1   ' Open file.   
+   Line Input #1, TextLine      ' Read line into variable.
+   StartTime = TextLine      ' get start time.
+   Line Input #1, TextLine      ' Read line into variable.
+   StartDate = TextLine      ' get start date.   
+Close #1                  ' Close file.
+
+Code "G4 P0.5"
+While IsMoving
+Wend
+
+If HrEnd<HrStart Then
+Hr=((24-HrStart)+(24-(24-HrEnd)))
+Else
+Hr=(HrEnd-HrStart)
+End If
+
+If MinEnd<MinStart Then
+Min=((60-MinStart)+(60-(60-MinEnd)))
+Else
+Min=(MinEnd-MinStart)
+End If
+
+If SecEnd<SecStart Then
+Sec=((60-SecStart)+(60-(60-SecEnd)))
+Else
+Sec=(SecEnd-SecStart)
+End If
+
+If (DyEnd-DyStart)= 0 Then
+Days = 0
+End If
+
+If ((DyEnd-DyStart)=1) And (HrEnd<HrStart) Then
+Days = 0
+End If
+
+If ((DyEnd-DyStart)=1) And (HrEnd>HrStart) Then
+Days = 1
+End If 
+
+If ((DyEnd-DyStart)>1) Then
+Days = (DyEnd-DyStart)
+End If
+
+
+'Dim As String writeOut 
+'writeOut = "File Name: " & File &  "Start Time: " & StartTime & "Start Date: " & StartDate & "End Time: " & EndTime & "End Date: " & EndDate & "Total Time: " & " Days: " & Days & " Hours: " & Hr & " Mins: " & Min & " Secs: " & Sec
+
+Kill "C:\Users\cnc\Google Drive\Log\TimeFile"
+
+Open "C:\Users\cnc\Google Drive\Log\Log.csv" For Output As #2   ' Open to write file.
+
+Write #2, "File Name: " & File
+Write #2, "Start Time: " & StartTime, "Start Date: " & StartDate
+Write #2, "End Time: " & EndTime, "End Date: " & EndDate
+Write #2, "Total Time: " & " Days: " & Days & " Hours: " & Hr & " Mins: " & Min & " Secs: " & Sec
+
+Close #2
+
+Code "G4 P0.5"
+While IsMoving
+Wend

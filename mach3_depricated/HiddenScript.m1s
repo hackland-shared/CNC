@@ -1,0 +1,1 @@
+DoButton( 24 )DoButton( 23 )DoButton( 22 )DoButton( 25 )DoOEMButton(133)DoOEMButton(134)DoOEMButton(135)SetVar(1,True) 'set machine homed to true  

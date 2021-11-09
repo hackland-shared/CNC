@@ -1,0 +1,13 @@
+loadrt debounce cfg=1 
+setp debounce.0.delay 100 #this sets the delay 100 iterations of the servo-thread
+addf debounce.0 servo-thread
+net deb-probe-in debounce.0.0.in <= hm2_7i76e.0.7i76.0.0.input-20-not
+net probe debounce.0.0.out
+net probe => motion.probe-input
+
+loadusr -W hal_manualtoolchange
+net tool-change-request     iocontrol.0.tool-change       =>  hal_manualtoolchange.change
+net tool-change-confirmed   iocontrol.0.tool-changed      <=  hal_manualtoolchange.changed
+net tool-number             iocontrol.0.tool-prep-number  =>  hal_manualtoolchange.number
+net tool-prepare-loopback   iocontrol.0.tool-prepare      =>  iocontrol.0.tool-prepared
+

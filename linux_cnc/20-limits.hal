@@ -1,0 +1,28 @@
+# external input signals
+# --- MIN-HOME-Y ---
+net both-home-y     <=  hm2_7i76e.0.7i76.0.0.input-17
+
+net both-home-y     =>  joint.2.home-sw-in
+net both-home-y     =>  joint.2.neg-lim-sw-in
+net both-home-y     =>  joint.2.pos-lim-sw-in
+
+
+# --- MAX-X ---
+net both-home-x     <=  hm2_7i76e.0.7i76.0.0.input-19
+
+
+net both-home-x     =>  joint.0.home-sw-in
+net both-home-x     =>  joint.0.neg-lim-sw-in
+net both-home-x     =>  joint.0.pos-lim-sw-in
+
+net both-home-x     =>  joint.1.home-sw-in
+net both-home-x     =>  joint.1.neg-lim-sw-in
+net both-home-x     =>  joint.1.pos-lim-sw-in
+
+# --- MAX-Z ---
+net both-home-z     <=  hm2_7i76e.0.7i76.0.0.input-18-not
+
+net both-home-z => joint.3.home-sw-in
+net both-home-z => joint.3.neg-lim-sw-in
+net both-home-z => joint.3.pos-lim-sw-in
+
