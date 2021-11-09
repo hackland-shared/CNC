@@ -1,0 +1,1 @@
+'m3.m1s'Writen C. Stewart'03/06/2018 - Added FRO to 20%, added pump on, added logging to CSV.Code "M1003" ' Log outCode "M8" ' Turn on pumps and coolantsetOEMDRO(821,20) ' override feed rate to 20% for initial pass.'Code "G4 P1000"''While IsMoving()'Wend'Sleep(10000)'Sytem.Threading.Thread.Sleep(1000)While GetTimer(15)<10	Sleep 3000WendDoSpinCW()

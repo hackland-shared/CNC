@@ -1,0 +1,26 @@
+# Include your custom_postgui HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+setp vfd.enable 1
+
+
+
+#net tool-change gmoccapy.toolchange-change <= iocontrol.0.tool-change
+#net tool-changed gmoccapy.toolchange-changed <= iocontrol.0.tool-changed
+#net tool-prep-number gmoccapy.toolchange-number <= iocontrol.0.tool-prep-number
+#net tool-prep-loop iocontrol.0.tool-prepare <= iocontrol.0.tool-prepared
+
+
+net tooloffset-x gmoccapy.tooloffset-x <= motion.tooloffset.x
+net tooloffset-z gmoccapy.tooloffset-z <= motion.tooloffset.z
+
+
+net xbox-left gmoccapy.jog.axis.jog-x-minus
+net xbox-right gmoccapy.jog.axis.jog-x-plus
+net xbox-up gmoccapy.jog.axis.jog-y-plus
+net xbox-down gmoccapy.jog.axis.jog-y-minus
+net xbox-feed-increase gmoccapy.spc_feed.increase
+net xbox-feed-decrease gmoccapy.spc_feed.decrease
+net xbox-feed-reset gmoccapy.feed.reset-feed-override
+
+net xbox-silver-btn halui.estop.activate

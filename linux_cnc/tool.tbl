@@ -1,0 +1,6 @@
+T1 P1 D6.000000 Z-124.497752 ;6mm drill 
+T2 P2 D10.000000 Z-70.270440 ;10mm single flute endmill 
+T3 P3 D22.000000 Z-112.961250 ;#7 tap drill 
+T4 P4 D10.000000 Z+0.100000 ;big tool number 
+T5 P5 D6.000000 ;comment 
+T6 P6 D4.000000 Z-59.287428 ;3mm Drill 
