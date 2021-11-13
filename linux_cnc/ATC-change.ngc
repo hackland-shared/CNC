@@ -1,106 +1,211 @@
 
-# Tool change .ngc for Jianken ATC to run in linuxCNC
-# written: C. Stewrt November 2021
-# cstewart000@gmail.com
+( Tool change .ngc for Jianken ATC to run in linuxCNC)
+( written: C. Stewrt November 2021)
+( cstewart000@gmail.com)
 
 
-# References: http://www.jinlantrade.com/ebay/invertermanual.pdf
-https://github.com/peterdownunder/mechmate
+( References: http://www.jinlantrade.com/ebay/invertermanual.pdf)
+( https://github.com/peterdownunder/mechmate)
+( LinuxCNC ref manula (pg60+))
+( LinuxCNC manual Chapter 16 - "O Codes")
+( http://linuxcnc.org/docs/2.7/html/code/code-notes.html#_the_tool_table_and_toolchanger  24.1.1. Nonrandom Toolchangers)
 
 
-### Hardware definitions.
+(Hardware definitions.)
 
-# Outputs
-# M62 P0 - Tool clutch - air inlet/air return
-# M62 P1 - Purge air - dust removal (internal rotor)
-# M62 P2 - air sealed - to clean dust and chips off external spindle w. way
-# M62 P3 - Spare
-
-
-# INPUTS
-
-# Thermistor 103F3950 R25:10K 1% B 3950K
-
-# Tool holder in position brown 10-30VDC - black wire signal??
+( Outputs
+( M62 P0 - Tool clutch - air inlet/air return)
+( M62 P1 - Tool clutch - air return
+( M62 P2 - Purge air - dust removal (internal rotor))
+( M62 P3 - air sealed - to clean dust and chips off external spindle w. way)
 
 
-# Variables
-	# x_y_safe_jog_speed 200
-	# z_safe_jog_speed 100
-	# x_y_normal_jog_speed 500
-	# z_normal_jog_speed 200
 
-	# pocket_offset -50
-	# clutch_time
+( INPUTS)
 
+( Thermistor 103F3950 R25:10K 1% B 3950K)
+(M66 E0 - read thermistor)
 
-M6 T6
-
-# pre-check safety
-
-	#Is Z-axis homed
-
-	#spindle off?
+( Tool holder in position brown 10-30VDC - black wire signal??)
+(M66 P0 L0 NB: result stored to #5399)
 
 
-# Is there a tool in the spindle?
-
-	OR(
-		# virtual pin?
-		# Spindle output
 
 
-	# yes, which tool?
 
-		# return tool
+o<ATC-change> sub
 
-	# no.
+(Parameters)
+#<x_y_safe_jog_speed> 	=	#1 (200)
+#<z_safe_jog_speed>		= 	#2 (100)
+#<x_y_normal_jog_speed> =	#3 (500)
+#<z_normal_jog_speed> 	=	#4 (200)
+#<pocket_offset> 		=	#5 (-50)
+#<clutch_time> 			=	#6 (5000)
+#<pocket_height_abs> 	=	#7	(-50)
 
 
-# return tool
+#<tool> = #<selected_tool>
+#<pocket> = #<selected_pocket>
 
-	# move to tool pocket location -50mm Y.
 
-	# Lower z axis to pocket height
+;(debug, in change tool_in_spindle=#<tool_in_spindle> current_pocket=#<current_pocket>)
+;(debug, selected_tool=#<selected_tool> selected_pocket=#<selected_pocket>)
 
-	# Slow move to location
 
-	# Clutch
-		# control valve for tool release (for 3-5s)
+(taken from template toolchange - sure what )
+; we must execute this only in the milltask interpreter
+; or preview will break, so test for '#<_task>' which is 1 for 
+; the milltask interpreter and 0 in the UI's
+O100 if [#<_task> EQ 0]
+        (debug, Task ist Null)
+O100     return [999]
+O100 endif
 
-		# control valve for dust removal 
 
-	# Slow retract Z axis
 
-	# move to tool pocket location -50mm Y.
+( pre-check safety)
+o100 sub
+	(Is Z-axis homed)
 
-	# Set virtual pin "no tool" 
+	(spindle off?)
 
-# pickup tool
+o100 endsub
 
-	# move to tool pocket location
 
+; cancel tool offset
+G49
+
+; using the code being remapped here means 'use builtin behaviour'
+M6
+
+
+o200
+
+
+	( Is there a tool in the spindle?)
+	M66 P0 L0 (NB: result stored to #5399)
+
+	if [#5399]
+
+	OR()
+		( virtual pin?)
+		( Spindle output)
+
+
+	( yes, which tool?)
+
+		( return tool)
+
+	( no.)
+o200 endsub
+
+
+( return tool)
+o300
+	
+	(retract Z)
+	G53 Z0 F[#4]
+
+	( move to tool pocket location -50mm Y.)
+	G53 X300 Y1250 F[#3]
+
+	( Lower z axis to pocket height)
+	G53 Z[#7] F[#2]
+
+	( Slow move to location)
+	G53 X300 Y1300 F[#2]
+
+	( Clutch)
+		( control valve for tool release (for 3-5s))
+		M62 P1
+
+		( control valve for dust removal) 
+		M62 P2
+		M62 P3
+
+		(dwell)
+		G04 P[#6]
+		M63 P1
+
+	( Slow retract Z axis)
+
+	G53 Z0 F[#2]
+
+	( move to tool pocket location -50mm Y.)
+	G53 X300 Y1250 F[#2]
+
+	(check no tool)
+	M66 P0 L0 
+
+		o390 if [#5399 EQ 1] (NB: result stored to #5399)
+			(Throw error)
+
+		o390 endif
+
+ 	( Set virtual pin "no tool" )
+
+
+o300 endsub
+
+
+( pickup tool)
+o400
+
+	(retract Z)
+	G53 Z0 F[#4]
+
+	( move to tool pocket location)
+	G53 X300 Y1300 F[#2]
 	
 
-	# Clutch
-		# control valve for tool release (for 3-5s)
+	( Clutch)
+		( control valve for tool release (for 3-5s))
+		M62 P0
 
-		# control valve for dust removal 
-
-
-	# slow Lower z axis to pocket height
-
-		# tun off air inlet and dust removal (same time)
-
-		# air return (5s)
-
-	# move to tool pocket location -50mm Y.
-
-		
+		( control valve for dust removal) 
+		M62 P2
+		M62 P3
 
 
 
-	# Slow retract Z axis
+	( slow Lower z axis to pocket height)
+	G53 Z[#7] F[#2]
 
-	# Set virtual pin "tool" 
 
+		( tun off air inlet and dust removal (same time))
+
+		M63 P0
+		M63 P2
+		M63 P3
+
+		( air return (5s))
+
+		M62 P1
+
+		(dwell)
+		G04 P[#6]
+
+		M63 P1
+
+	( move to tool pocket location -50mm Y.)
+	G53 X300 Y1250 F[#4]
+
+	( Slow retract Z axis)
+	G53 Z0 F[#4]
+
+	(check tool in position)
+	M66 P0 L0 
+
+		o490 if [#5399 EQ 0] (NB: result stored to #5399)
+			(Throw error)
+			
+		o490 endif
+
+	( Set virtual pin "tool" )
+
+o400 endsub
+
+
+; signal success be returning a value > 0:
+o<ATC-change> endsub [1]
