@@ -1,0 +1,26 @@
+# Include your custom HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+
+# set nets for the Mesa card read pins
+
+net ATC-spindle-thermistor		<=	hm2_7i76e.0.7i76.0.0.input-17 
+net ATC-spindle-tool-engaged 	<=	hm2_7i76e.0.7i76.0.0.input-17 
+
+# connect the ATC to motion (M code)
+# Tool holder in position brown 10-30VDC - black wire signal??)
+# M66 P0 L0 NB: result stored to #5399)
+# M66 Pnn wait-for-input mode (digital)
+
+net motion.digital-in-00 		<=	ATC-spindle-tool-engaged
+
+
+# Thermistor 103F3950 R25:10K 1% B 3950K)
+# M66 E0 - read thermistor)
+
+net motion.analog-in-00 		<=	ATC-spindle-thermistor	
+
+
+
+
+

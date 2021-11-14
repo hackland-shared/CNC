@@ -1,0 +1,29 @@
+# HAL file for setup of NEJE laser to run from M commands
+
+# neje laser https://neje.shop/
+
+# PWM generator ref: http://linuxcnc.org/docs/html/man/man9/pwmgen.9.html
+loadrt pwmgen output_type = 0 
+
+addf pwmgen.update servo-thread # this ties the update cycle to the servo thread
+addf pwmgen.make-pulses base-thread
+
+# pwmgen.5000.pwm-freq (Question: if using the servo and base thread as carrier frequency, not necessary?)
+
+# set net for motion to the pwmgen 0 value.
+# connect the laser motion (M code)
+# motion.analog-out-NN OUT FLOAT These pins are used by M67-68.
+# M67 E0 Q? where E0 is analog out 0 and Q is the power level. 
+
+net neje-laser-power 	motion.analog-out-00 	=>	pwmgen.0.value
+
+net neje-laser-power		=>	hm2_7i76e.0.7i76.0.0.output
+
+# Set the scale TODO
+# setp pwmgen.0.scale 1800
+
+
+
+
+
+
