@@ -1,0 +1,20 @@
+; Testfile go to position
+; will jog the machine to a position to give
+
+O<crosshair_laser_off> sub
+
+G17 (XY plane)
+G21 (metric)
+G54 (Work coords)
+G61 (exact stop check)
+G40 (Cancel tool radius compensation)
+G49 (Tool offset cancel)
+G80 (Cancel canned cycle)
+G90 (Absolute coords)
+
+(Turn on the laser)
+M65 P0
+
+O<crosshair_laser_off> endsub
+
+M2

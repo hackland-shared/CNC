@@ -1,0 +1,34 @@
+# Include your custom HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+#sdigital out 00 executed by M62 => M65 P?
+net laser-signal motion.digital-out-00	=> hm2_7i76e.0.7i76.0.0.output-12
+
+net pneumatic-signal-clutch motion.digital-out-01	=> hm2_7i76e.0.7i76.0.0.output-13
+net pneumatic-signal-purge motion.digital-out-02	=> hm2_7i76e.0.7i76.0.0.output-14
+net pneumatic-signal-flood motion.digital-out-03	=> hm2_7i76e.0.7i76.0.0.output-15
+
+
+# setys hig or low the output pin
+# setp invert hm2_7i76e.0.7i76.0.0.output-15 0
+
+net laser-signal 	=>	hm2_7i76e.0.7i76.0.0.output-12
+net pneumatic-signal-clutch	=>	hm2_7i76e.0.7i76.0.0.output-13
+net pneumatic-signal-purge 	=>	hm2_7i76e.0.7i76.0.0.output-14
+net pneumatic-signal-flood	=>	hm2_7i76e.0.7i76.0.0.output-15
+
+
+# Laser PWM
+loadrt pwmgen output_type=0
+
+addf pwmgen.update servo-thread
+addf pwmgen.make-pulses base-thread
+
+#TTL 20kHz
+pwmgen.0.pwm-freq  200000 
+
+net laser-power-cmd motion.analog-out => pwmgen.0.value
+# net spindle-on motion.spindle-on => pwmgen.0.enable
+net laser-pwm pwmgen.0.pwm => hm2_7i76.0.0.output12
+# Set the spindle's top speed in RPM
+setp pwmgen.0.scale 1800
