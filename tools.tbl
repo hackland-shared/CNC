@@ -1,0 +1,26 @@
+T0 P0 D0; Vaccum only'
+T10 P0 D0; Vaccum only'
+T1 P0 D0; Generic - tool toucg\h off required
+T10630 P0 D6; Standard 6mm end mill
+T10426 P0 D4; Standard 4mm end mill
+T10215 P0 D2; Standard 2mm end mill
+T12212 P0 D22; Facing fly mill
+T31616 P0 D16; 60 deg chamfer tool
+T30606 P0 D6; 45 deg chamfer tool - narrow
+T31206 P0 D6; 45 deg chamfer tool
+T30612 P0 D6; 60 deg chamfer tool
+T40410 P0 D4: Centre Drill
+T50130 P0 D1; 1mm drill
+T50230 P0 D2; 2mm drill
+T50330 P0 D3; 3mm drill
+T50430 P0 D4; 4mm drill
+T50530 P0 D5; 5mm drill
+T50630 P0 D6; 6mm drill
+T50730 P0 D7; 7mm drill
+T50830 P0 D8; 8mm drill
+T50930 P0 D9; 9mm drill
+T51030 P0 D10; 10mm drill
+T61206 P0 D12; Slot mill
+T70000 P0 D80; Vacuum
+T90000 P0 D1; Laser cutter
+T90001 P0 D1; Pen plotter
